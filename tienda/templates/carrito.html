@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tu Carrito - TecnoMarket Cloud</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-dark mb-4 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-white" href="{% url 'index' %}">TECNOMARKET CLOUD</a>
+            <a href="{% url 'index' %}" class="btn btn-outline-light fw-bold">Volver al Catálogo</a>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="p-4 mb-4 bg-dark text-white rounded-3 shadow-sm">
+            <h2 class="fw-bold text-light">Proyecto: TecnoMarket Cloud</h2>
+            <p class="mb-1"><strong>Estudiante:</strong> Augusto Soto García</p>
+            <p class="text-secondary small mb-0">Fecha: Junio 2026 | Asignatura: Tecnología Cloud</p>
+        </div>
+
+        <h3 class="fw-bold text-dark mb-4">Detalle de tu Pedido</h3>
+        
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow-sm border-0 p-4">
+                    {% if request.session.carrito.items %}
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key, value in request.session.carrito.items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if value.imagen_url %}
+                                            <img src="{{ value.imagen_url }}" style="width: 50px; height: 50px; object-fit: cover;" class="rounded me-3">
+                                            {% endif %}
+                                            <span class="fw-bold text-dark">{{ value.nombre }}</span>
+                                        </div>
+                                    </td>
+                                    <td>${{ value.precio }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <a href="{% url 'restar_del_carrito' value.producto_id %}" class="btn btn-sm btn-outline-secondary px-2">-</a>
+                                            <span class="fw-bold">{{ value.cantidad }}</span>
+                                            <a href="{% url 'agregar_al_carrito' value.producto_id %}" class="btn btn-sm btn-outline-secondary px-2">+</a>
+                                        </div>
+                                    </td>
+                                    <td class="fw-bold text-primary">${{ value.total }}</td>
+                                    <td>
+                                        <a href="{% url 'eliminar_del_carrito' value.producto_id %}" class="btn btn-sm btn-danger fw-bold text-white">X</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <a href="{% url 'limpiar_carrito' %}" class="btn btn-sm btn-warning fw-bold text-dark">Vaciar Carrito Completo</a>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <p class="text-muted fs-5 mb-0">No has agregado ningún producto todavía.</p>
+                        <a href="{% url 'index' %}" class="btn btn-dark mt-3 fw-bold">Ir al catálogo</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 p-4 bg-dark text-white">
+                    <h5 class="fw-bold mb-4 text-light">Resumen del Pedido</h5>
+                    <div class="d-flex justify-content-between mb-4 border-bottom border-secondary pb-3">
+                        <span class="fs-5">Total a Pagar</span>
+                        <span class="fs-4 fw-bold text-light">${{ total_pago }}</span>
+                    </div>
+                    {% if request.session.carrito.items %}
+                        <a href="{% url "procesar_pago" %}" class="btn btn-primary w-100 fw-bold py-2 shadow-sm">Proceder al Pago</a>
+                    {% else %}
+                        <button class="btn btn-secondary w-100 fw-bold py-2 shadow-sm" disabled>Proceder al Pago</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
