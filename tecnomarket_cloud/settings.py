@@ -78,8 +78,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tecnomarket_db',
         'USER': 'admin',
-        'PASSWORD': 'PassAWS',
-        'HOST': 'ENDPOINT RDS',
+        'PASSWORD': 'TecnoMarket2026',
+        'HOST': 'tecnomarket-db.cg6mdcf9dqbn.us-east-1.rds.amazonaws.com',
         'PORT': '3306',
     }
 }
